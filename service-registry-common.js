@@ -2,21 +2,6 @@ import { SchemaOptions } from './lib/SchemaOptions'
 
 export const ServiceRegistry = {}
 
-ServiceRegistry.types = {
-  list: 'list',
-  form: 'form',
-  children: 'children',
-  gallery: 'gallery',
-  document: 'document',
-  typeView: 'typeView'
-}
-
-ServiceRegistry.fieldTypes = {
-  keyMap: 'keyMap',
-  context: 'context',
-  collection: 'collection'
-}
-
 ServiceRegistry.schemaOptions = SchemaOptions
 
 ServiceRegistry.methods = {}
