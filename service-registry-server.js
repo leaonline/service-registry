@@ -31,6 +31,7 @@ function getDependencies (schema) {
   Object.values(schema).forEach(field => {
     if (!field.dependency) return
     if (field.dependency.collection) dependencies.add(field.dependency.collection)
+    if (field.dependency.filesCollection) dependencies.add(field.dependency.filesCollection)
     if (field.dependency.context) dependencies.add(field.dependency.context)
   })
   return Array.from(dependencies)
@@ -42,7 +43,7 @@ function clean (context) {
     label: context.label,
     icon: context.icon,
     useHistory: context.useHistory,
-    isFilesCollection: !!context.isFilesCollection,
+    isFilesCollection: context.isFilesCollection,
     isConfigDoc: !!context.isConfigDoc,
     isType: !!context.isType,
     representative: context.representative
@@ -61,6 +62,14 @@ function clean (context) {
     if (context.publications) {
       cleaned.publications = extract(context.publications, { schemaStr })
     }
+  }
+
+  if (context.isFilesCollection) {
+    cleaned.accept = context.accept
+    cleaned.extensions = context.extensions
+    cleaned.maxSize = context.maxSize
+    cleaned.original = context.original
+    cleaned.preview = context.preview
   }
 
   if (context.types) {
