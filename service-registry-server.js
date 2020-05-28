@@ -46,6 +46,7 @@ function clean (context) {
     isFilesCollection: context.isFilesCollection,
     isConfigDoc: !!context.isConfigDoc,
     isType: !!context.isType,
+    isItem: !!context.isItem,
     representative: context.representative
   }
 
@@ -104,7 +105,7 @@ ServiceRegistry.register = function (context) {
 
 ServiceRegistry.replacer = function replacer (name, val) {
   if (typeof val === 'function') {
-    return val.prototype.constructor.name
+    return val.prototype && val.prototype.constructor && val.prototype.constructor.name
   } else {
     return val
   }
