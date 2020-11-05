@@ -31,13 +31,10 @@ function getDependencies (schema) {
   Object.values(schema).forEach(field => {
     if (!field.dependency) return
 
-    const { dependency } = field
-
     const { collection, filesCollection, context } = field.dependency
     ;[collection, filesCollection, context].forEach(value => {
       if (value) dependencies.add(value)
     })
-
   })
 
   return Array.from(dependencies)
