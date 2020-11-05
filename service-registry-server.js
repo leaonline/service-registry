@@ -30,10 +30,16 @@ function getDependencies (schema) {
   const dependencies = new Set()
   Object.values(schema).forEach(field => {
     if (!field.dependency) return
-    if (field.dependency.collection) dependencies.add(field.dependency.collection)
-    if (field.dependency.filesCollection) dependencies.add(field.dependency.filesCollection)
-    if (field.dependency.context) dependencies.add(field.dependency.context)
+
+    const { dependency } = field
+
+    const { collection, filesCollection, context } = field.dependency
+    ;[collection, filesCollection, context].forEach(value => {
+      if (value) dependencies.add(value)
+    })
+
   })
+
   return Array.from(dependencies)
 }
 
@@ -44,9 +50,9 @@ function clean (context) {
     icon: context.icon,
     useHistory: context.useHistory,
     isFilesCollection: context.isFilesCollection,
-    isConfigDoc: !!context.isConfigDoc,
-    isType: !!context.isType,
-    isItem: !!context.isItem,
+    isConfigDoc: Boolean(context.isConfigDoc),
+    isType: Boolean(context.isType),
+    isItem: Boolean(context.isItem),
     representative: context.representative
   }
 
