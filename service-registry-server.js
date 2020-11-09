@@ -106,8 +106,12 @@ ServiceRegistry.register = function (context) {
   cache.set('content', _content)
 }
 
+const getType = o => Object.prototype.toString.call(o)
+
 ServiceRegistry.replacer = function replacer (name, val) {
-  if (typeof val === 'function') {
+  if (getType(val) === '[object RegExp]') {
+    return EJSON.toJSONValue(val)
+  } else if (typeof val === 'function') {
     return val.prototype && val.prototype.constructor && val.prototype.constructor.name
   } else {
     return val
