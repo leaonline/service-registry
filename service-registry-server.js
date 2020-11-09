@@ -1,4 +1,5 @@
 import { check, Match } from 'meteor/check'
+import { EJSON } from 'meteor/ejson'
 import { ServiceRegistry } from './service-registry-common'
 
 const cache = new Map()
