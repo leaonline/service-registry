@@ -46,6 +46,7 @@ function clean (context) {
     name: context.name,
     label: context.label,
     icon: context.icon,
+    info: context.info,
     useHistory: context.useHistory,
     isFilesCollection: context.isFilesCollection,
     isConfigDoc: Boolean(context.isConfigDoc),
