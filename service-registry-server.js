@@ -82,6 +82,10 @@ function clean (context) {
     cleaned.types = context.types
   }
 
+  if (context.actions) {
+    cleaned.actions = context.actions
+  }
+
   return JSON.stringify(cleaned, ServiceRegistry.replacer, 0)
 }
 
