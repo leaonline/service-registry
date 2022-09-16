@@ -16,7 +16,6 @@ Package.onUse(function (api) {
   api.use('ecmascript')
   api.use('check')
   api.use('ejson')
-  api.use('leaonline:ejson-regexp')
   api.mainModule('service-registry-server.js', 'server')
   api.mainModule('service-registry-client.js', 'client')
 })
