@@ -1,10 +1,17 @@
 import { check, Match } from 'meteor/check'
 import { EJSON } from 'meteor/ejson'
 import { ServiceRegistry } from './service-registry-common'
+import { getType } from './lib/utils'
 
 const cache = new Map()
 const langs = new Map()
 
+/**
+ * Returns basic definitions from cache.
+ * Usually these are saved when {ServiceRegistry.init} is called.
+ * @private
+ * @return {{icon: any, description: any, label: any, content: any}}
+ */
 const getSrc = () => {
   return {
     icon: cache.get('icon'),
@@ -14,7 +21,7 @@ const getSrc = () => {
   }
 }
 
-function extract (source = {}, { schemaStr }) {
+const extract = (source = {}, { schemaStr }) => {
   const target = {}
   const entries = Object.entries(source)
   entries.forEach(([key, value]) => {
@@ -27,7 +34,7 @@ function extract (source = {}, { schemaStr }) {
   return target
 }
 
-function getDependencies (schema) {
+const getDependencies = (schema) => {
   const dependencies = new Set()
   Object.values(schema).forEach(field => {
     if (!field.dependency) return
@@ -41,7 +48,7 @@ function getDependencies (schema) {
   return Array.from(dependencies)
 }
 
-function clean (context) {
+const clean = (context) => {
   const cleaned = {
     name: context.name,
     label: context.label,
@@ -100,10 +107,20 @@ ServiceRegistry.init = function ({ icon, label, description }) {
   cache.set('initialized', true)
 }
 
+/**
+ * Adds a translation for a given language iso code.
+ * @param locale {string} iso code
+ * @param config {object} i18n object
+ */
 ServiceRegistry.addLang = function (locale, config) {
   langs.set(locale, config)
 }
 
+/**
+ * Registers a given context, that will be extracted for
+ * remote-control usage.
+ * @param context {object}
+ */
 ServiceRegistry.register = function (context) {
   if (!cache.get('initialized')) throw new Error('[ServiceRegistry] not initialized')
   const _content = cache.get('content')
@@ -112,8 +129,13 @@ ServiceRegistry.register = function (context) {
   cache.set('content', _content)
 }
 
-const getType = o => Object.prototype.toString.call(o)
-
+/**
+ * Returns a JSON-replacer, that helps to handle certain
+ * edge-cases.
+ * @param name
+ * @param val
+ * @return {*|Function|string}
+ */
 ServiceRegistry.replacer = function replacer (name, val) {
   if (getType(val) === '[object RegExp]') {
     return EJSON.toJSONValue(val)
@@ -124,8 +146,16 @@ ServiceRegistry.replacer = function replacer (name, val) {
   }
 }
 
+/**
+ *
+ * @param lang {string}
+ * @return {{icon: any, description: any, label: any, content: any}}
+ */
 ServiceRegistry.get = function (lang) {
-  if (!cache.get('initialized')) throw new Error('[ServiceRegistry] not initialized')
+  if (!cache.get('initialized')) {
+    throw new Error('[ServiceRegistry] not initialized')
+  }
+
   const src = getSrc()
   src.lang = langs.get(lang)
   return src
