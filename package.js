@@ -12,7 +12,7 @@ Package.describe({
 })
 
 Package.onUse(function (api) {
-  api.versionsFrom('1.10.2')
+  api.versionsFrom(['3.0.1'])
   api.use('ecmascript')
   api.use('check')
   api.use('ejson')
@@ -21,6 +21,7 @@ Package.onUse(function (api) {
 })
 
 Package.onTest(function (api) {
+  api.versionsFrom(['3.0.1'])
   api.use('ecmascript')
   api.use('tinytest')
   api.use('leaonline:service-registry')
